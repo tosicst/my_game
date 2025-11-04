@@ -23,6 +23,7 @@ class Player:
         self.hurt_image = "hero_hurt"
 
         self.frame_timer = 0
+        self.frame_death = 0
         
     def update(self, keyboard, sound_enabled):
         moving = False
@@ -51,10 +52,6 @@ class Player:
         # Shooting
         if self.shoot_cooldown > 0:
             self.shoot_cooldown -= 1
-            
-        if keyboard.space and self.shoot_cooldown == 0:
-            self.shoot(sound_enabled)
-            self.shoot_cooldown = 15
             
         # Update bullets
         for bullet in self.bullets[:]:
