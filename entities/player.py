@@ -23,7 +23,6 @@ class Player:
         self.hurt_image = "hero_hurt"
 
         self.frame_timer = 0
-        self.frame_death = 0
         
     def update(self, keyboard, sound_enabled):
         moving = False
