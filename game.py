@@ -16,11 +16,13 @@ class GameState:
     MENU = "menu"
     PLAYING = "playing"
     GAME_OVER = "game_over"
+    WIN = "win"
 
 current_state = GameState.MENU
 sound_enabled = True
 score = 0
 current_music = None
+WIN_SCORE = 200
 
 def play_music(music_name):
     global current_music
@@ -132,6 +134,11 @@ def update():
         
         check_enemy_collisions()
 
+        # Check win condition
+        if score >= WIN_SCORE:
+            current_state = GameState.WIN
+            play_music("win")
+
         # Check game over
         if player.lives <= 0:
             current_state = GameState.GAME_OVER
@@ -198,6 +205,15 @@ def draw():
         screen.draw.text("Click to return to menu", center=(WIDTH // 2, HEIGHT // 2 + 100), 
                         fontsize=25, color="gray")
 
+    elif current_state == GameState.WIN:
+        screen.fill((0, 20, 40))
+        screen.draw.text("YOU WIN!!!", center=(WIDTH // 2, HEIGHT // 2 - 50), 
+                        fontsize=70, color="yellow", shadow=(3, 3))
+        screen.draw.text(f"Final Score: {score}", center=(WIDTH // 2, HEIGHT // 2 + 30), 
+                        fontsize=40, color="white")
+        screen.draw.text("Click to return to menu", center=(WIDTH // 2, HEIGHT // 2 + 130), 
+                        fontsize=25, color="gray")
+
 def on_mouse_down(pos):
     global current_state, sound_enabled
     
@@ -218,6 +234,9 @@ def on_mouse_down(pos):
         player.shoot(sounds, sound_enabled, pos[0], pos[1])
     
     elif current_state == GameState.GAME_OVER:
+        current_state = GameState.MENU
+
+    elif current_state == GameState.WIN:
         current_state = GameState.MENU
 
 pgzrun.go()
